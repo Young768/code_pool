@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import re
 
 filepath = 'build-php'
 print("test")
@@ -7,7 +8,7 @@ data1 = []
 data2 = []
 with open(filepath) as fp:
    line = fp.readline()
-   result = "Time To Compile"
+   result = "Time To Compile:"
    print(result)
    cnt = 0
    while line:
@@ -15,7 +16,10 @@ with open(filepath) as fp:
            arr = []
            for x in range(6):
                if (x >=1 ):
-                x = float(fp.readline())
+                line = fp.readline()
+                ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
+                a = ansi_escape.sub('', line)
+                x = float(a)
                 arr.append(x)
                 cnt += 1
            sd = np.std(arr)
@@ -27,7 +31,7 @@ with open(filepath) as fp:
 bar = []
 bar.append(0.0)
 for i in data1:
-    tmp = (data1[5] - i)/data1[5]
+    tmp = ( data1[6]-i)/data1[6]
     bar.append(tmp)
     print(tmp)
 bar.append(0.0)
@@ -36,7 +40,7 @@ bar.append(0.0)
 bar1 = []
 bar1.append(0.0)
 for j in data2:
-    tmp1 = j/data1[5]
+    tmp1 = j/data1[6]
     bar1.append(tmp1)
     print(tmp1)
 bar1.append(0.0)
@@ -44,7 +48,7 @@ objects = ('0','Previous', 'ClearLinux', 'OverLoad','NoAffine', 'FirstIdle', 'CF
 y_pos = np.arange(len(objects))
 
 fig = plt.figure()
-fig.suptitle('build-php', fontsize=14, fontweight='bold')
+fig.suptitle('crafty', fontsize=14, fontweight='bold')
 #e = [0.5, 1., 1.5, 2. , .5, 1., 1.5, 2.]
 plt.errorbar(y_pos, bar, yerr=bar1, fmt='o')
 plt.xticks(y_pos, objects)
